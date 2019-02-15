@@ -1,1 +1,1 @@
-public
+AML course: https://github.com/glouppe/info8004-advanced-machine-learning
