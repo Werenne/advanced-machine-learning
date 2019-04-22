@@ -2,3 +2,19 @@
 \.DS_Store
 
 slides/
+
+*.gz
+
+*.aux
+
+*.bbl
+
+*.log
+
+*.nav
+
+*.out
+
+*.snm
+
+*.toc

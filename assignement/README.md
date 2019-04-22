@@ -1,1 +1,0 @@
-Critics of paper: https://openreview.net/forum?id=ry_WPG-A- 
