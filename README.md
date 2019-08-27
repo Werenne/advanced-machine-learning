@@ -1,6 +1,6 @@
 ## Advanced Machine Learning
 
-This repository contains my assignments of the "Advanced Machine Learning" course given by Professors Gilles Louppe & Pierre Geurts at the University of Liège. Official link to the course can be found [here](https://github.com/glouppe/info8004-advanced-machine-learning).
+This repository contains my assignments of the "Advanced Machine Learning" course given by Professors Pierre Geurts & Gilles Louppe at the University of Liège. Official link to the course can be found [here](https://github.com/glouppe/info8004-advanced-machine-learning).
 
 ### Assignments
 
