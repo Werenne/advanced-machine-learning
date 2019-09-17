@@ -34,31 +34,31 @@
 
 \section*{Abstract}
 
-Deep Neural Networks are used in many applications nowadays, from image classification to speech recognition. In many of those specific tasks, they achieve human-level performance. Paradoxically, the success of Deep Learning (DL) is far from being fully understood. Why is DL able to generalize so well? Why is the performance increased if we stack more layers? The Information Bottleneck theory tries to answer those questions. The goal of this review paper is i) to present the fascinating results obtained when applying the Information Bottleneck to DL ii) to discuss the limitations of the theory iii) explore applications. 
+Deep Neural Networks are used in many applications nowadays, from image classification to speech recognition, achieving human-level performance. Paradoxically, the success of Deep Learning (DL) is far from being fully understood. Why are deep learning models able to generalize? Why is the performance increased when stacking more layers? An attempt to answer those questions is made with the Information Bottleneck theory. The objective of this review paper is i) to present the fascinating results obtained by applying the Information Bottleneck to DL ii) to discuss the limitations of the theory iii) explore potential applications. 
 
 
 \section{Introduction}
 
-For the course INFO8004 the assignment of our group was to analyze and summarize how the Information Bottleneck (IB) is used to interpret how Deep Neural Networks (DNN) learn and generalize \citep{Tishby2, Tishby3}. In Section 2 of this paper the necessary background is presented to understand the Information Bottleneck. Section 3 starts by presenting how the IB can be applied to Deep Learning. Then the main results of the experiments performed by the authors are explained. In the last section, we discuss the limitations and the possible further applications that could be developed.
+For the course INFO8004 the assignment of our group was to analyse and summarize the Information Bottleneck (IB) and how it is used to interpret Deep Neural Networks (DNN) \citep{Tishby2, Tishby3}. In Section 2 of this paper the necessary background is presented to understand the Information Bottleneck. Section 3 then starts by presenting how the IB is applied to Deep Learning. Next, we explain the main results of the experiments performed by the authors. Lastly, the limitations and possible further applications that could be developed are discussed.
 
 
 \section{Background}\label{sec:background}
 
 \noindent \textbf{Mutual Information} \\[0.15cm]
-\indent Let $X \in \mathcal{X}$ and $Y \in \mathcal{Y}$ be two random variables with a joint distribution $p(X,Y)$. Mutual Information (MI) is given by 
+\indent Let $X \in \mathcal{X}$ and $Y \in \mathcal{Y}$ be two random variables with a joint distribution $p(X,Y)$. The concept of Mutual Information (MI) is defined as
 \begin{equation}
 I(X;Y) = \mathbb{E} \left[log\left(\frac{p(X,Y)}{p(X)p(Y)} \right)\right]
 \label{eq:mutual-info}
 \end{equation}
-For most distributions (except exponential distributions) direct MI computation is intractable. One common estimation technique is to discretize continuous variables by binning. The expectation in (\ref{eq:mutual-info}) can then be approximated with sampling techniques. Note that this binning process introduces some noise.\\
+For most distributions (except exponential distributions) direct MI computation is intractable. One common estimation technique is to discretize continuous variables by binning. The expectation expressed in (\ref{eq:mutual-info}) can then be approximated with sampling techniques. It is worth noticing that this binning process introduces some noise.\\
 
 \noindent \textbf{Minimal Sufficient Statistics} \\[0.15cm]
-\indent A \textit{sufficient statistic} is defined as the quantity of relevant information about a target $Y$ from observations $X$. Mathematically, a probabilistic function $S(X)$ is a sufficient statistic for $Y$ if and only if
+\indent A \textit{sufficient statistic} is defined as the quantity of relevant information on the targets $Y$ contained in the observations $X$. More specifically, a probabilistic function $S(X)$ is a sufficient statistic for $Y$ if and only if
 \begin{equation}
 I(S(X);Y) = I(X;Y)
 \label{eq:suff-stat}
 \end{equation}
-A \textit{minimal sufficient statistic} $T(X)$ is the optimal representation containing all the available information about $Y$, while being the best possible compression of $X$:
+Furthermore, a \textit{minimal sufficient statistic} $T(X)$ is the optimal representation containing all the available information about $Y$, while being the best possible compression of $X$:
 
 \begin{equation}
 T(X) = \argmin_{S(X) \, : \, I(S(X);Y) = I(X;Y)} I(S(X);X)
@@ -66,17 +66,17 @@ T(X) = \argmin_{S(X) \, : \, I(S(X);Y) = I(X;Y)} I(S(X);X)
 \end{equation}
 
 \noindent \textbf{Information Bottleneck} \\[0.15cm]
-\indent Solving the optimization problem (\ref{eq:min-suff-stat}) is in most practical problems (highly dimensional input space) very difficult to compute. Inspired from the Rate-Distortion theory of Shannon, Tishby presented the IB method \citep{Tishby1} to make the optimization solvable. By Lagrange Relaxation Eq.\ref{eq:min-suff-stat} can be solved like
+\indent Solving the optimization problem (\ref{eq:min-suff-stat}) is in most practical problems (highly dimensional input space) difficult to compute. Inspired from the Rate-Distortion theory of Shannon, Tishby presented the IB method \citep{Tishby1} in order to turn this optimization problem solvable. Using the Lagrange relaxation, Equation (\ref{eq:min-suff-stat}) is solved like
 
 \begin{equation}
 \min_{p(t|x)} I(T;X) - \beta I(T;Y)
 \label{eq:lagrange}
 \end{equation}
-with $\beta$, the Lagrange multiplier controlling the trade-off between the amount of compression and preserved information about $Y$.
+with $\beta$ the Lagrange multiplier controlling the trade-off between the amount of information about $Y$ being compressed/preserved .
 
 \section{Information Bottleneck and Deep Learning}
 
-Let a DNN whose inputs are noted as $X \in \mathcal{X}$, we want the model to make good predictions $\hat{Y}$ to approximate the ground truth labels noted $Y \in \mathcal{Y}$. The authors model the DNN as a Markov Chain where each hidden layer $i$ is represented as  a single random variable $T_i$. The authors prove experimentally that the hidden layers $T_i$ approach the IB optimal solution for different $\beta$ values (see Fig.1).\\
+Let $X \in \mathcal{X}$ be the inputs and $Y \in \mathcal{Y}$ the ground-truth labels, the authors model the DNN as a Markov Chain where each hidden layer $i$ is represented as  a single random variable $T_i$. Thereupon, they proved experimentally that the hidden layers $T_i$ approach the IB optimal solution for different values of $\beta$ (see Figure 1).\\
 
 \begin{figure}[!htb]
 \includegraphics[width=\linewidth, height=\textheight, keepaspectratio]{figs/ib-curve.jpeg}
@@ -85,10 +85,10 @@ Let a DNN whose inputs are noted as $X \in \mathcal{X}$, we want the model to ma
 \end{figure}
 
 \noindent \textbf{Information Plane} \\[0.15cm]
-\indent One of the main contributions of the authors is to study the learning process of the model in the information plane (IP) introduced in \citep{Tishby2}. This visualizations show how mutual information $I(T;X)$ and $I(T;Y)$ evolve during the optimization process. Having randomly initialized layers, the deeper layers fail to preserve the information about the input at the beginning of the training (due to the Data Processing Inequality \citep{dpi}). We also observe that deeper layers have nearly no MI with the labels, which is expected. In the first phase of the learning process, the model fits to the data and tries to improve its predictions. In the second much slower phase, the mutual information measures move to the upper left direction, in other words layers lose information about their input while slightly increasing information about the labels.\\This phase is also called the compression or diffusion phase. The authors claim that the compression part of the training is responsible for reducing generalization error.\\
+\indent One of the main contributions is the study of the learning process of neural networks in the information plane, introduced in \citep{Tishby2}. Their experiments using the information plane showed how mutual informations $I(T;X)$ and $I(T;Y)$ evolve during the optimization process (see figure and link to video in the original paper). Initially, it can be seen that the deeper layers fail to preserve the information about the input since the layers are randomly initialized. Moreover, Tishby et al. distinguish two phases observed visually. In the first phase of the learning process, the model fits to the data in order to improve its predictions. More interestingly, in the second much slower phase, mutual informations in the information plane move to the upper left corner, in other words, layers lose information about their input while slightly increasing information about the labels. Authors call this phase is the \textit{compression} or \textit{diffusion} phase. They claim that the compression part of the training is responsible for reducing generalization error.\\
 
 \noindent \textbf{Stochastic Gradient Descent} \\[0.15cm]
-\indent In our opinion, the most interesting part of the paper is the explanation of how DNN achieve compression. The mean and variance of the norms of the gradients per layer are plotted in Fig.2. We can distinguish two parts (again): for the first 300 epochs, the gradients have a high norm and very small deviations. Then the variance starts becoming much more important than the norm of the gradients. Notice that these two time intervals are exactly corresponding to the two phases observed previously in the information plane. While the network is fitting the data, the loss is decreasing rapidly, it is thus expected to have large gradients with low variance. The more surprising result is why are noisy gradients responsible for compression? The authors explain that Stochastic Gradient Descent is equivalent to a Random Walk in the parameter space of the loss function. This Random Walk adds random noise to the weights, increasing the entropy of layers $T_i$ with respect to the inputs while still minimizing training error.  Having an increasing conditional entropy $H(X|T_i)$ causes a decreasing mutual information $I(X;T_i)$, because the input entropy $H(X)$ remains unchanged.\\
+\indent In our opinion, the most interesting part of the paper is the explanation of how neural networks achieve compression. Figure 2 displays the mean and variance of the gradients per layer. Notice that the two previously mentioned phases can be observed. For the first 300 epochs, the gradients have a high norm and very small deviations, then the variance grows larger until becoming more important than the mean. While the network is fitting the data, the loss is decreasing rapidly. As expected, this corresponds to large gradients with low variance. On the contrary, the compression phase has noisy gradients (i.e. high variance). The authors explain that Stochastic Gradient Descent with a noisy gradient is equivalent to a Random Walk in the parameter space of the loss function. As a consequence, random noise is added to the weights, leading to an increase in the entropy of layers $T_i$ with respect to the inputs. It is worth noticing that this occurs while keeping the training error stable.  The conditional entropy $H(X|T_i)$ being increased will cause a decrease of the mutual information $I(X;T_i)$, since the input entropy $H(X)$ remains unchanged.\\
 
 \begin{figure}[!htb]
 \includegraphics[width=\linewidth, height=\textheight, keepaspectratio]{figs/gradients.jpeg}
@@ -98,15 +98,15 @@ Let a DNN whose inputs are noted as $X \in \mathcal{X}$, we want the model to ma
 
 
 \noindent \textbf{Overfitting and Hidden Layers} \\[0.15cm]
-\indent These new insights help us better understand two well-known phenomena in deep learning: \textit{overfitting} and \textit{deeper models make the model generalize faster}. \\
-\indent \textit{Overfitting} can be analyzed in the information plane (see Fig.3). We observe that overfitting occurs mostly in the compression phase, i.e. overfitting can be seen as overcompression, the layers simplify the representation too much. \\
+\indent This new insight helps us better understand two well-known phenomena in deep learning: \textit{overfitting} and \textit{deeper models generalize faster}. \\
+\indent \textit{Overfitting} can be interpreted in the information plane (see Figure 3). We observe that overfitting occurs mostly in the compression phase, where it seems that the representation in the layers is simplified too much. \\
 
-\indent \textit{The computational benefit of deeper NN} is according to the authors due to the fact that adding more hidden layers helps the compression go faster, thus generalizing faster. Previously, we saw that the SGD can be seen as a Random Walk, from the Focker-Planck equation \cite{fokker}, the quantity of entropy increase is deduced as 
+\indent The computational benefit of deeper NN is according to the authors due to the fact that adding more hidden layers makes the compression go faster, i.e. generalizing faster. Indeed using the Focker-Plank equation \cite{fokker}, the quantity of entropy increase due to SGD follows the relationship
 \begin{equation}
 \Delta H \propto log(D\tau)
 \label{eq:propto}
 \end{equation}
-with $D$ a diffusion constant and $\tau$ the number of epochs. The number of epoch needed to make a compression $\Delta I_X$ grows exponentially as $\text{exp}(\Delta I_X / D)$. If we split the compression task between K hidden layers, each layer compresses $\Delta I^k_X$, with $\sum_k \Delta I^k_X = \Delta I_X$. The time needed for these K layers to achieve the same compression as one layer is $\sum_k \text{exp}(\Delta I^k_X/D)$. However the exponential of a sum is much larger than the sum of an exponential. This explains why compression is achieved faster when we make the network deeper.
+with $D$ the diffusion constant and $\tau$ the number of epochs. Thus, the number of epoch needed to make a compression $\Delta I_X$ grows exponentially as $\text{exp}(\Delta I_X / D)$. If the compression task is shared among K hidden layers, each layer compresses $\Delta I^k_X$, where $\Delta I_X = \sum_k \Delta I^k_X$. Thereupon, the time needed for these K layers to achieve the compression, $\Delta I_X$, is $\sum_k \text{exp}(\Delta I^k_X/D)$. Since the exponential of a sum grows larger than the sum of an exponential, the authors deduce that compression is achieved faster in deeper networks.
 
 \begin{figure*}[!htb]
 \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{figs/overfitting.jpeg}
@@ -140,7 +140,6 @@ $$
 $$
 This equation is equivalent to the VAE loss in the special case when $\beta = 1$. It was shown that using a VAE with a hyperparameter $\beta > 1$ beats several state-of-the art results. This relationship, in our opinion conforts the justification of using MI as a tool to analyze or improve DL techniques. \\
 \indent It is also worth noting that noise plays an important role in compression, and thus improving generalization. One could imagine using noise to improve existing optimization algorithms or even develop new ones.\\
-\indent One last comment, is that all results of the IB applied to DL are valid only because we assume that a DNN can be modelled as a Markov Chain. The question is are we sure this is always true? For example, what happens if residual connections are used? 
 
 % ==============================================================================
 
